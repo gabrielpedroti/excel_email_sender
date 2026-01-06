@@ -8,9 +8,7 @@ from dotenv import load_dotenv
 import os
 from datetime import datetime
 
-# =========================
 # Configurações iniciais
-# =========================
 load_dotenv()
 
 EMAIL_USER = os.getenv("EMAIL")
@@ -29,17 +27,13 @@ LOG_FILE = "envios.log"
 if not all([EMAIL_USER, EMAIL_PASS, SMTP_SERVER, SMTP_PORT, ARQUIVO_EXCEL]):
     raise ValueError("Erro: variáveis obrigatórias ausentes no arquivo .env")
 
-# =========================
 # Contadores
-# =========================
 total = 0
 enviados = 0
 pulados = 0
 erros = 0
 
-# =========================
 # Função de log
-# =========================
 def registrar_log(texto):
     with open(LOG_FILE, "a", encoding="utf-8") as log:
         log.write(texto + "\n")
@@ -47,17 +41,13 @@ def registrar_log(texto):
 inicio = datetime.now()
 registrar_log(f"\n=== Início do envio: {inicio.strftime('%d/%m/%Y %H:%M:%S')} ===")
 
-# =========================
 # Leitura de dados
-# =========================
 df = pd.read_excel(ARQUIVO_EXCEL)
 
 with open(ARQUIVO_HTML, "r", encoding="utf-8") as file:
     html_template = file.read()
 
-# =========================
 # Conexão com servidor
-# =========================
 if USE_SSL:
     context = ssl.create_default_context()
     server = smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT, context=context)
@@ -67,9 +57,7 @@ else:
 
 server.login(EMAIL_USER, EMAIL_PASS)
 
-# =========================
 # Processamento
-# =========================
 for index, row in df.iterrows():
     total += 1
     nome = str(row.get("nome", "")) or str(row.get("Nome", "")).strip()
@@ -101,9 +89,7 @@ for index, row in df.iterrows():
         erros += 1
         registrar_log(f"{nome} | {email_destino} | ERRO | {str(e)}")
 
-# =========================
 # Encerramento
-# =========================
 server.quit()
 
 fim = datetime.now()

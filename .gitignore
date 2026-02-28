@@ -2,6 +2,9 @@
 Teste.xlsx
 relacao_empregados.xlsx
 
+#Arquivos de mensagem HTML
+email_template_old.html
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
